@@ -24,10 +24,8 @@ def index():
 def play(row, col):
     if session.get('started'):
         session["board"][row][col] = session["turn"]
-        if session["turn"] == 'X':
-            session["turn"] = 'O'
-        else: 
-            session["turn"] = 'X'
+        player = 'O' if session["turn"] =='X' else 'X'
+        session["turn"] = player
         return render_template("game.html", game=session["board"], turn=session["turn"])
     else:  
         return redirect(url_for("index"))
