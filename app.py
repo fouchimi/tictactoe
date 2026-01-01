@@ -17,19 +17,22 @@ def index():
                             [None, None, None], 
                             [None, None, None]]
         session["turn"] = "X"
+        session['started'] = True
     return render_template("game.html", game=session["board"], turn=session["turn"])
 
 @app.route("/play/<int:row>/<int:col>")
 def play(row, col):
-    session["board"][row][col] = session["turn"]
-    if session["turn"] == 'X':
-        session["turn"] = 'O'
-    else: 
-        session["turn"] = 'X';    
+    if session.get('started'):
+        session["board"][row][col] = session["turn"]
+        if session["turn"] == 'X':
+            session["turn"] = 'O'
+        else: 
+            session["turn"] = 'X';    
     return redirect(url_for("index"))
 
 @app.route("/reset")
 def reset():
      session["board"] = [[None, None, None], [None, None, None], [None, None, None]]
-     session["turn"] = "X"
+     session.pop('turn', None)
+     session.pop('started', None)
      return redirect(url_for("index"))
